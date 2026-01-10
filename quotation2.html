@@ -1,0 +1,1235 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>Luxury Photography Quotation Builder — Sweet Memories</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- jsPDF & html2canvas (CDN) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <style>
+    /* =========================
+       Luxury theme — Gold + Dark Navy
+       Mobile-first, premium UI
+       ========================= */
+    :root{
+      --bg1:#0f2027;   /* navy gradient start */
+      --bg2:#203a43;   /* navy gradient middle */
+      --bg3:#2c5364;   /* teal-ish end */
+      --card:#071021;  /* card background */
+      --muted:#bfc8cc; /* muted text */
+      --gold:#ffffff;  /* primary accent */
+      --gold-2:#fafafa;
+      --red:#c0392b;   /* reset */
+      --glass: rgba(255,255,255,0.03);
+      --radius:14px;
+      --pad:14px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;color:#fff;background:linear-gradient(180deg,var(--bg1),var(--bg2),var(--bg3));-webkit-font-smoothing:antialiased}
+    a{color:inherit}
+    button{font-family:inherit;cursor:pointer}
+    /* Topbar */
+    .topbar{display:flex;align-items:center;gap:12px;padding:12px var(--pad);position:sticky;top:0;z-index:80;background:transparent}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:200px;height:50px;border-radius:2px;background:linear-gradient(180deg,var(--gold-2),var(--gold));display:flex;align-items:center;justify-content:center;color:#07202a;font-weight:900}
+    .brand-title{font-weight:800}
+    .brand-sub{font-size:12px;color:var(--muted)}
+
+    /* Page layout */
+    .wrap{max-width:1200px;margin:18px auto;padding:0 var(--pad) 120px;display:grid;grid-template-columns:1fr;gap:18px}
+    @media(min-width:1000px){ .wrap{grid-template-columns:1fr 380px} }
+
+    /* Hero */
+    .hero{min-height:36vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;border-radius:12px;position:relative;background-image:url('placeholder-hero.jpg');background-size:cover;background-position:center}
+    .hero::after{content:"";position:absolute;inset:0;border-radius:12px;background:linear-gradient(180deg,rgba(2,6,23,0.2),rgba(2,6,23,0.6))}
+    .hero-inner{position:relative;z-index:2;color:#fff;max-width:980px;object-fit:contain;}
+    .hero h1{margin:0;font-size:clamp(20px,4vw,36px);font-weight:800}
+    .hero p{margin:8px 0 14px;color:rgba(255,255,255,0.9)}
+    .cta{display:inline-flex;gap:10px;align-items:center;padding:12px 18px;border-radius:999px;border:none;background:linear-gradient(90deg,var(--gold),var(--gold-2));color:#07202a;font-weight:800;box-shadow:0 14px 40px rgba(212,175,55,0.12)}
+    .cta:active{transform:scale(.995)}
+
+    /* Wizard header / stepper */
+    .wizard-header{background:transparent;padding:12px;border-radius:12px}
+    .stepper{display:flex;gap:10px;align-items:center}
+    .step-pill{display:flex;flex-direction:column;align-items:center;gap:6px}
+    .step-circle{width:36px;height:36px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.03);font-weight:800}
+    .step-circle.active{background:linear-gradient(90deg,var(--gold),var(--gold-2));color:#07202a;box-shadow:0 8px 30px rgba(212,175,55,0.12)}
+    .step-label{font-size:12px;color:var(--muted);text-align:center}
+
+    /* Panels */
+    .panel{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;padding:14px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 14px 40px rgba(2,6,23,0.55)}
+    h2{margin:6px 0 12px;font-size:18px;font-weight:800}
+
+    /* Grid and cards */
+    .grid{display:grid;gap:12px}
+    .grid.cols-3{grid-template-columns:repeat(3,1fr)}
+    @media (max-width:760px){ .grid.cols-3{grid-template-columns:repeat(2,1fr)} }
+    @media (max-width:420px){ .grid.cols-3{grid-template-columns:repeat(1,1fr)} }
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.0));border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.03);cursor:pointer;transition:transform .18s,box-shadow .18s;display:flex;flex-direction:column}
+    .card:hover{transform:translateY(-6px);box-shadow:0 24px 60px rgba(0,0,0,0.35)}
+    .card .imgwrap{ width:100%;height:220px;               /* adjust if needed */ background:#0b1620;
+  overflow:hidden;display:flex;align-items:center;justify-content:center ;}
+    .card img{width:100%;height:100%;object-fit:cover;display:block}
+    .card .content{padding:10px;display:flex;align-items:center;justify-content:space-between}
+    .card .title{font-weight:700}
+    .card .muted{font-size:13px;color:var(--muted)}
+
+    /* ===============================
+   WEDDING SUB EVENTS – IMAGE ONLY
+   =============================== */
+
+/* Force image-only cards */
+.wedding-sub-card {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #0b1620;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+/* Hide old text completely */
+.wedding-sub-card .content {
+  display: none !important;
+}
+
+/* Image wrapper full size */
+.wedding-sub-card .imgwrap {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .4s ease;
+}
+
+/* Image fit perfectly */
+.wedding-sub-card img {
+  width: 100%;
+  height: 80%;
+  object-fit: cover;
+  transition: transform .5s ease;
+}
+
+/* Hover zoom (premium feel) */
+.wedding-sub-card:hover img {
+  transform: scale(1.08);
+}
+
+/* Dark gradient overlay */
+.wedding-sub-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.55),
+    rgba(0,0,0,0.05)
+  );
+  opacity: 0;
+  transition: opacity .3s ease;
+}
+
+.wedding-sub-card:hover::after {
+  opacity: 1;
+}
+
+/* Event name overlay */
+.img-overlay {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  font-size: 16px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: .3px;
+  z-index: 2;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: all .3s ease;
+}
+/* ===============================
+   WEDDING SUB EVENTS – WITH CAPTIONS
+   =============================== */
+
+.wedding-sub-card {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #0b1620;
+  border: 1px solid rgba(255,255,255,0.05);
+  cursor: pointer;
+}
+
+/* Hide old content completely */
+.wedding-sub-card .content {
+  display: none !important;
+}
+
+/* Image container */
+.wedding-sub-card .imgwrap {
+  position: relative;
+  width: 100%;
+  height: 230px;
+  overflow: hidden;
+}
+
+/* Image fit */
+.wedding-sub-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .5s ease;
+}
+
+/* Subtle zoom on hover */
+.wedding-sub-card:hover img {
+  transform: scale(1.06);
+}
+
+/* Caption bar */
+.img-caption {
+   position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 12px 14px;
+  font-size: 16px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 0.4px;
+  z-index: 2;
+
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.75),
+    rgba(0,0,0,0.35),
+    rgba(0,0,0,0)
+  );
+}
+
+/* Optional hover glow */
+.wedding-sub-card:hover {
+  box-shadow: 0 18px 45px rgba(0,0,0,0.45);
+}
+
+
+    /* Option rows */
+    .option-row{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:rgba(255,255,255,0.01);gap:10px}
+    .option-left{display:flex;gap:12px;align-items:center}
+    .option-right{display:flex;gap:8px;align-items:center}
+    .price-badge{background:linear-gradient(90deg,var(--gold),var(--gold-2));padding:6px 10px;border-radius:8px;font-weight:800;color:#07202a}
+    input.qty, select.qty{width:72px;padding:6px;border-radius:8px;border:none;background:white;color:black;text-align:center}
+
+    /* Buttons */
+    .btn{padding:10px 12px;border-radius:10px;border:none;cursor:pointer;font-weight:800}
+    .btn.primary{background:linear-gradient(90deg,var(--gold),var(--gold-2));color:#07202a}
+    .btn.ghost{background:transparent;border:1px solid rgba(92, 228, 54, 0.06);color:#fff}
+    .btn.reset{background:var(--red);color:#fff}
+    .btn.small{padding:8px 10px;border-radius:8px;font-weight:700}
+
+    /* Cart: desktop right column */
+    .cart-column{display:none}
+    @media(min-width:1000px){ .cart-column{display:block} }
+    .cart-panel{position:sticky;top:18px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+    .cart-item{display:flex;justify-content:space-between;gap:8px;padding:10px;border-radius:8px;border:1px dashed rgba(255,255,255,0.02);align-items:center;margin-bottom:8px}
+    .cart-controls{display:flex;gap:8px;align-items:center}
+
+    /* Mobile drawer cart */
+    .drawer-toggle{position:fixed;right:16px;bottom:18px;background:linear-gradient(90deg,var(--gold),var(--gold-2));color:#07202a;padding:12px 14px;border-radius:999px;box-shadow:0 12px 36px rgba(212,175,55,0.18);z-index:90;display:none}
+    .mobile-drawer{position:fixed;left:0;right:0;bottom:0;background:linear-gradient(180deg,#071021,#071521);border-radius:14px 14px 0 0;padding:12px;transform:translateY(100%);transition:transform .3s;z-index:95;max-height:70vh;overflow:auto;border:1px solid rgba(255,255,255,0.03)}
+    .mobile-drawer.open{transform:translateY(0)}
+    @media(max-width:999px){ .drawer-toggle{display:flex} }
+
+    /* Review */
+    .review-table{width:100%;border-collapse:collapse;margin-top:8px}
+    .review-table th, .review-table td{padding:8px;border-bottom:1px solid rgba(255,255,255,0.03);text-align:left;font-size:14px}
+
+    /* Toast */
+    .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:22px;background:#07202a;color:var(--gold);padding:10px 16px;border-radius:8px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:200}
+
+    /* accessibility focus */
+    button:focus, input:focus, select:focus { outline:3px solid rgba(212,175,55,0.18); outline-offset:2px }
+  </style>
+</head>
+<body>
+  <!-- Topbar -->
+  <!-- <div class="topbar" role="banner">
+    <div class="brand" aria-label="Brand">
+      <div class="logo">
+        <img src="images/logos/smlogo.png" alt="Sweet Memories" style="width:225px;height:50px;border-radius:8px;object-fit:cover;background:white;" />
+      </div>
+      <div>
+        <div class="brand-title"></div>
+        <div class="brand-sub"></div>
+      </div>
+    </div>
+    <div style="margin-left:auto;color:var(--muted);font-size:13px"></div>
+  </div> -->
+
+  <!-- Hero -->
+  <header class="hero" role="region" aria-label="Hero banner">
+    <div class="hero-inner">
+      <img src="gallery/sweetmemoriesphotographylog.jpeg" alt="Sweet Memories" style="width:50%;height:350px;border-radius:8px;object-fit:contain;background:none;margin-bottom:12px" />
+      <h1>Build Your Quote</h1>
+      <p>Your Budget, Your Vision -- But, It's Our Promise of High Elegance.</p>
+      <div style="display:flex;gap:10px;justify-content:center;margin-top:12px">
+        <button class="cta" id="btnStart">✨ Build your quotation</button>
+        <button class="btn reset" id="btnResetTop" aria-label="Reset">Reset</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main wrap -->
+  <main class="wrap" role="main">
+    <!-- Left: Wizard -->
+    <div>
+      <!-- Wizard header / stepper -->
+      <div class="panel wizard-header" aria-hidden="false">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+          <div style="display:flex;gap:12px;align-items:center">
+            <div class="stepper" role="tablist" aria-label="Wizard steps">
+              <div class="step-pill" data-step="1">
+                <div class="step-circle active" id="stepCircle1">1</div>
+                <div class="step-label">Occasion</div>
+              </div>
+              <div style="width:10px"></div>
+              <div class="step-pill" data-step="2">
+                <div class="step-circle" id="stepCircle2">2</div>
+                <div class="step-label">Event Parts</div>
+              </div>
+              <div style="width:10px"></div>
+              <div class="step-pill" data-step="3">
+                <div class="step-circle" id="stepCircle3">3</div>
+                <div class="step-label">Album</div>
+              </div>
+              <div style="width:10px"></div>
+              <div class="step-pill" data-step="4">
+                <div class="step-circle" id="stepCircle4">4</div>
+                <div class="step-label">Review</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="min-width:160px;text-align:right;color:var(--muted)" id="progressNote">Step 1 of 4</div>
+        </div>
+      </div>
+
+      <!-- Step 1: Occasions -->
+      <section id="step-1" class="panel" aria-labelledby="stepCircle1">
+        <h2>Choose Occasion</h2>
+        <div class="grid cols-3" id="occasionsGrid" role="list">
+          <!-- JS will inject occasion cards (placeholder image names in script) -->
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px">
+          <button class="btn ghost" id="clearOccasions">Clear</button>
+          <div style="display:flex;gap:8px">
+            <button class="btn ghost" id="skipToSubs">Skip</button>
+            <button class="btn primary" id="toStep2">Next</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Step 2: Sub-services -->
+      <section id="step-2" class="panel" style="display:none" aria-labelledby="stepCircle2">
+        <h2>Select Event Parts</h2>
+        <p style="color:var(--muted);margin-top:-6px" id="subNote">Tap an event part to open its options (photos/videos).</p>
+        <div id="subservicesGrid" class="grid cols-3" role="list" style="margin-top:12px"></div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px">
+          <div id="selectedCount" style="color:var(--muted)">Selected: 0</div>
+          <div style="display:flex;gap:8px">
+            <button class="btn ghost" id="backTo1">Back</button>
+            <button class="btn primary" id="toStep3">Next: Album</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Step 3: Album -->
+      <section id="step-3" class="panel" style="display:none" aria-labelledby="stepCircle3">
+        <h2>Album & Delivery</h2>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+          <div>
+            <label style="display:block;font-weight:700;margin-bottom:6px">Sheets</label>
+            <h2>Album Selection</h2>
+
+<div style="display:flex;gap:14px;flex-wrap:wrap">
+
+  <!-- Album Type -->
+  <div>
+    <label style="display:block;font-weight:700;margin-bottom:6px">
+      Album Type
+    </label>
+    <select id="albumType" class="qty">
+      <option value="classic">Classic – ₹450 / sheet</option>
+      <option value="premium">Premium – ₹650 / sheet</option>
+      <option value="luxury">Luxury – ₹750 / sheet</option>
+    </select>
+  </div>
+
+  <!-- Sheets -->
+  <div>
+    <label style="display:block;font-weight:700;margin-bottom:6px">
+      Number of Sheets
+    </label>
+    <input
+      type="number"
+      id="albumSheets"
+      class="qty"
+      min="10"
+      value="20"
+    />
+  </div>
+
+</div>
+
+          </div>
+          <div>
+            <label style="display:block;font-weight:700;margin-bottom:6px">Delivery (months)</label>
+           
+          </div>
+          <!-- <div style="margin-left:auto;color:var(--muted);font-size:13px">Price formula: ₹2,000 + ₹80 × sheets</div> -->
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px">
+          <button class="btn ghost" id="backTo2">Back</button>
+          <div style="display:flex;gap:8px">
+            <button class="btn ghost" id="skipAlbum">Skip</button>
+            <button class="btn primary" id="addAlbumBtn">Add & Review</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Step 4: Review -->
+      <section id="step-4" class="panel" style="display:none" aria-labelledby="stepCircle4">
+        <h2>Review & Download</h2>
+        <div id="reviewArea">
+          <table class="review-table" id="reviewTable" aria-live="polite">
+            <thead><tr><th>Item</th><th style="text-align:right">Qty</th><th style="text-align:right">Unit</th><th style="text-align:right">Subtotal</th></tr></thead>
+            <tbody id="reviewBody"></tbody>
+          </table>
+
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px">
+            <div style="color:var(--muted)">Grand total</div>
+            <div style="font-weight:900;font-size:18px" id="grandTotal">₹0</div>
+          </div>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px">
+          <div style="display:flex;gap:8px">
+            <button class="btn ghost" id="backTo3">Back</button>
+            <button class="btn reset" id="resetBtn">Reset</button>
+          </div>
+          <div style="display:flex;gap:8px">
+            <!-- <button class="btn ghost" id="editEmailBtn">Add client details</button> -->
+            <button class="btn primary" id="downloadBtn">Download PDF</button>
+            
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Right: Cart column (desktop) -->
+    <aside class="cart-column" aria-label="Cart">
+      <div class="cart-panel panel" role="region" aria-label="Quotation Cart">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div style="font-weight:900">Quotation</div>
+          <div style="color:var(--muted)" id="desktopCartCount">0 items</div>
+        </div>
+
+        <div id="desktopCartList" style="max-height:56vh;overflow:auto;margin-bottom:10px"></div>
+
+        <div style="display:flex;flex-direction:column">
+          <div style="display:flex;justify-content:space-between;color:var(--muted)">Subtotal <span id="desktopSubtotal">₹0</span></div>
+          <div style="display:flex;justify-content:space-between;font-weight:900;margin-top:8px">Total <span id="desktopTotal">₹0</span></div>
+        </div>
+
+        <div style="display:flex;gap:8px;margin-top:12px;justify-content:space-between">
+          <button class="btn ghost" id="desktopReset">Reset</button>
+          <button class="btn primary" id="desktopPdf">Download</button>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Mobile drawer toggle -->
+  <div class="drawer-toggle" id="drawerToggle" aria-controls="mobileDrawer" aria-expanded="false" title="Open quotation" style="display:none">
+    <div style="font-weight:800">Quotation</div>
+    <div id="drawerCount" style="font-weight:700">0</div>
+  </div>
+
+  <!-- Mobile drawer -->
+  <div class="mobile-drawer" id="mobileDrawer" aria-hidden="true" style="display:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <div style="font-weight:900">Your Quotation</div>
+      <div><button class="btn ghost" id="closeDrawer">Close</button></div>
+    </div>
+    <div id="mobileCartList" style="max-height:56vh;overflow:auto"></div>
+    <div style="display:flex;justify-content:space-between;margin-top:8px">
+      <div style="font-weight:800">Total</div>
+      <div style="font-weight:900" id="mobileTotal">₹0</div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:10px;justify-content:flex-end">
+      <button class="btn ghost" id="mobileReset">Reset</button>
+      <button class="btn primary" id="mobilePdf">Download</button>
+    </div>
+  </div>
+
+  <!-- Options modal (compact) -->
+  <div id="optionsModal" role="dialog" aria-modal="true" aria-hidden="true" style="display:none;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:200;width:92%;max-width:520px;background:linear-gradient(180deg,#071021,#071421);border-radius:12px;padding:12px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 20px 60px rgba(0,0,0,0.6)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <div style="font-weight:900" id="modalTitle">Options</div>
+      <div><button class="btn ghost" id="modalClose">Close</button></div>
+    </div>
+    <div id="modalBody" style="display:grid;gap:8px;max-height:60vh;overflow:auto"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+      <div class="muted" id="modalNote" style="color:var(--muted)">Select services & quantity</div>
+      <div style="display:flex;gap:8px">
+        <button class="btn ghost" id="modalClear">Clear</button>
+        <button class="btn primary" id="modalDone">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast" role="status" aria-live="polite">Added to cart</div>
+
+  <script>
+  /*
+    Luxury Quotation Builder
+    Single-file: HTML/CSS/JS
+    - Theme: Gold + Dark Navy
+    - Stepper navigation
+    - Desktop cart (right), mobile drawer (bottom)
+    - Pricing & mapping as requested
+    - PDF export via jsPDF + html2canvas
+    - localStorage persistence
+  */
+
+  /* ---------- Configuration (edit here) ---------- */
+  const PRICING = {
+    'Traditional Photo': 8000,
+    'Traditional video': 8000,
+    'Candid Photography': 10000,
+    'Candid video': 12000,
+    'Authentic Photo': 10000,
+    'Authentic video': 12000,
+    'Drone': 10000,
+    'Pics+ Cover Song': 15000,
+    'Dining video': 8000,
+    'audience' : 8000
+  };
+   
+  const ALBUM_TYPES = {
+  classic: { label: 'Classic Album', rate: 450 },
+  premium: { label: 'Premium Album', rate: 650 },
+  luxury: { label: 'Luxury Album', rate: 750 }
+};
+
+  const SERVICE_OPTIONS = {
+    'haldi': ['Traditional Photo','Traditional video','Candid Photography','Candid video'],
+    'nalugu': ['Traditional Photo','Traditional video','Candid Photography','Candid video'],
+    'batchelors': ['Traditional Photo','Traditional video','Candid Photography','Candid video'],
+    'sangeeth': ['Traditional Photo','Traditional video','Candid Photography','Candid video'],
+    'mehandhi': ['Traditional Photo','Traditional video','Candid Photography','Candid video'],
+    'bride_to_be': ['Candid Photography','Candid video','Traditional Photo','Traditional video'],
+    'reception': ['Candid Photography','Candid video','Traditional Photo','Traditional video','Authentic Photo','Authentic video','Drone'],
+    'muhurtham': ['Candid Photography','Candid video','Traditional Photo','Traditional video','Authentic Photo','Authentic video','Drone'],
+    'post_reception': ['Candid Photography','Candid video','Traditional Photo','Traditional video','Authentic Photo','Authentic video','Drone'],
+    'vratham': ['Traditional Photo','Traditional video','Candid Photography','Candid video'],
+    'pre_post_wedding': ['pics+ Cover Song'],
+    'Dining': ['Candid video'],
+    'audience': ['Candid Photography','Candid video'],
+    'drone_shots': ['Drone']
+  };
+
+ const OCCASIONS = [
+  {id:'wedding',label:'Wedding', img:'gallery/herogallery/heroimage1.jpeg'},
+  {id:'engagement',label:'Engagement', img:'gallery/galleryimagesinner/engagementimage1.jpeg'},
+  {id:'birthdays',label:'Birthday', img:'gallery/babyphotography/birthdayphotography4.jpg'},
+  {id:'maternity',label:'Maternity', img:'gallery/maternitygallery/indoorimage1.jpeg'},
+  {id:'halfsaree',label:'Halfsaree', img:'gallery/quotationgallery/halfsaree.jpg'},
+  {id:'housewarming',label:'Housewarming', img:'gallery/quotationgallery/housewarmin.jpeg'},
+  {id:'naming',label:'Naming Ceremony', img:'gallery/quotationgallery/namingceremon.jpeg'},
+  {id:'portfolio',label:'Portfolios', img:'gallery/modelshootgallery/fashionmodelimage1.jpeg'},
+  {id:'corporate',label:'Corporate Events', img:' gallery/quotationgallery/corporateimage1.jpeg'}
+];
+
+
+  const STORAGE_KEY = 'luxury_photo_quote_v1';
+
+  /* ---------- State ---------- */
+  let STATE = {
+    occasion: null,
+    subservices: [],
+    items: [], // {id,label,unitPrice,qty,meta:{sub,opt}}
+    album: null, // {sheets,months,price}
+    step: 1
+  };
+
+  /* ---------- DOM helpers ---------- */
+  const $ = s => document.querySelector(s);
+  const $$ = s => Array.from(document.querySelectorAll(s));
+
+  // Elements
+  const btnStart = $('#btnStart'), btnResetTop = $('#btnResetTop');
+  const toStep2 = $('#toStep2');
+const toStep3 = $('#toStep3');
+  const stepCircles = [$('#stepCircle1'), $('#stepCircle2'), $('#stepCircle3'), $('#stepCircle4')];
+  const progressNote = $('[id="progressNote"]') || document.getElementById('progressNote');
+
+  const occasionsGrid = $('#occasionsGrid');
+  const subservicesGrid = $('#subservicesGrid');
+  const selectedCount = $('#selectedCount');
+  const albumSheets = $('#albumSheets'), albumDelivery = $('#albumDelivery');
+  const addAlbumBtn = $('#addAlbumBtn');
+  const reviewBody = $('#reviewBody'), grandTotalEl = $('#grandTotal');
+  const desktopCartList = $('#desktopCartList'), desktopTotal = $('#desktopTotal'), desktopSubtotal = $('#desktopSubtotal'), desktopCartCount = $('#desktopCartCount');
+  const mobileCartList = $('#mobileCartList'), mobileTotal = $('#mobileTotal'), drawerToggle = $('#drawerToggle'), mobileDrawer = $('#mobileDrawer'), drawerCount = $('#drawerCount');
+
+  const downloadBtn = $('#downloadBtn'), desktopPdf = $('#desktopPdf'), mobilePdf = $('#mobilePdf');
+  const resetBtn = $('#resetBtn'), desktopReset = $('#desktopReset'), mobileReset = $('#mobileReset');
+
+  const optionsModal = $('#optionsModal'), modalTitle = $('#modalTitle'), modalBody = $('#modalBody'), modalClose = $('#modalClose'), modalClear = $('#modalClear'), modalDone = $('#modalDone');
+
+  const toastEl = $('#toast');
+
+  /* ---------- Utilities ---------- */
+  function formatCurrency(n){ n = Math.round(Number(n) || 0); return '₹' + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+  function uid(){ return 'id' + Math.random().toString(36).slice(2,9); }
+  function save(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(STATE)); } catch(e){} }
+  function load(){ try{ const raw = localStorage.getItem(STORAGE_KEY); if(raw) STATE = JSON.parse(raw); } catch(e){} }
+
+  let toastTimer = null;
+  function showToast(msg, t=1400){
+    toastEl.textContent = msg; toastEl.style.opacity = '1';
+    clearTimeout(toastTimer); toastTimer = setTimeout(()=> toastEl.style.opacity = '0', t);
+  }
+
+  /* ---------- Wizard controls ---------- */
+  function setStep(n){
+    STATE.step = n; save();
+    // toggle panels
+    $('#step-1').style.display = n===1 ? 'block' : 'none';
+    $('#step-2').style.display = n===2 ? 'block' : 'none';
+    $('#step-3').style.display = n===3 ? 'block' : 'none';
+    $('#step-4').style.display = n===4 ? 'block' : 'none';
+    // step circles active
+    for(let i=0;i<4;i++){
+      if(i < n) stepCircles[i].classList.add('active'); else stepCircles[i].classList.remove('active');
+    }
+    $('#progressNote').textContent = `Step ${n} of 4`;
+    window.scrollTo({top: document.querySelector('.wrap').offsetTop - 12, behavior: 'smooth'});
+    if(n === 4) renderReviewTable();
+  }
+
+  /* ---------- Render Occasions ---------- */
+  function renderOccasions(){
+    occasionsGrid.innerHTML = '';
+    OCCASIONS.forEach(o=>{
+      const card = document.createElement('div'); card.className='card';
+      card.innerHTML = `<div class="imgwrap"><img src="${o.img}" alt="${o.label}"></div>
+        <div class="content"><div><div class="title">${o.label}</div><div class="muted">Tap to select</div></div>
+        <div><button class="btn small ghost" data-id="${o.id}">Select</button></div></div>`;
+      occasionsGrid.appendChild(card);
+      card.addEventListener('click', ()=> chooseOccasion(o.id));
+      card.querySelector('button').addEventListener('click', (e)=>{ e.stopPropagation(); chooseOccasion(o.id); });
+    });
+  }
+
+  function chooseOccasion(id){
+    STATE.occasion = id;
+    STATE.subservices = [];
+    STATE.items = [];
+    STATE.album = null;
+    save();
+    renderSubservices();
+    setStep(2);
+    showToast('Occasion selected');
+  }
+  const WEDDING_SUB_EVENTS = [
+  { k: 'haldi', label: 'Haldi', img: 'gallery/quotationgallery/haldi.jpeg' },
+  { k: 'nalugu', label: 'Nalugu', img:'gallery/quotationgallery/nalugu.jpeg' },
+  { k: 'batchelors', label: 'Bachelor Party', img: 'gallery/quotationgallery/batchelorspart.jpeg' },
+  { k: 'sangeeth', label: 'Sangeet', img: 'gallery/quotationgallery/sangeet.jpeg' },
+  { k: 'mehandhi', label: 'Mehndi', img: 'gallery/quotationgallery/mehandi.jpeg' },
+  { k: 'bride_to_be', label: 'Bride To Be', img: 'gallery/quotationgallery/bridetob.jpeg' },
+  { k: 'reception', label: 'Reception', img: 'gallery/galleryimagesinner/receptionimage1.jpeg' },
+  { k: 'muhurtham', label: 'Muhurtham', img: 'gallery/herogallery/heroimage1.jpeg' },
+  { k: 'post_reception', label: 'Post Reception', img: 'gallery/galleryimagesinner/receptionimage2.jpeg'},
+  { k: 'vratham', label: 'Vratham', img: 'gallery/quotationgallery/vratha.jpeg' },
+  { k: 'pre_post_wedding', label: 'Pre / Post Wedding', img: 'gallery/quotationgallery/postweddin.jpeg' }
+];
+
+
+  /* ---------- Render Subservices ---------- */
+  function renderSubservices(){
+    subservicesGrid.innerHTML = '';
+    selectedCount.textContent = `Selected: ${STATE.subservices.length || 0}`;
+    if(!STATE.occasion) return;
+    if (STATE.occasion === 'wedding') {
+  subservicesGrid.innerHTML = '';
+
+  WEDDING_SUB_EVENTS.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'card wedding-sub-card';
+
+    card.innerHTML = `
+    <div class="imgwrap">
+  <img src="${p.img}" alt="${p.label}">
+  <div class="img-caption">${p.label}</div>
+</div>
+
+      <div class="content">
+        <div class="title">${p.label}</div>
+        <button class="btn small ghost">Select</button>
+      </div>
+    `;
+
+    card.addEventListener('click', () => openOptionsModal(p.k, p.label));
+    card.querySelector('button').addEventListener('click', (e) => {
+      e.stopPropagation();
+      openOptionsModal(p.k, p.label);
+    });
+
+    subservicesGrid.appendChild(card);
+  });
+}
+
+    else {
+      const generic = [
+        {k:'combo_pkg',label:'Photo + Video Package'}
+      ];
+      generic.forEach(p=>{
+        const card = document.createElement('div'); card.className='card';
+        card.innerHTML = `<div class="imgwrap"><div style="font-weight:900">${p.label[0]}</div></div>
+          <div class="content"><div><div class="title">${p.label}</div><div class="muted">Tap to pick options</div></div>
+          <div><button class="btn small ghost" data-sub="${p.k}">Pick</button></div></div>`;
+        subservicesGrid.appendChild(card);
+        card.querySelector('button').addEventListener('click', ()=> openOptionsModal(p.k,p.label));
+        card.addEventListener('click', ()=> openOptionsModal(p.k,p.label));
+      });
+    }
+  }
+
+  /* ---------- Options Modal ---------- */
+  let currentModalSub = null;
+  function openOptionsModal(subKey, subLabel){
+    currentModalSub = subKey;
+    modalTitle.textContent = subLabel;
+    modalBody.innerHTML = '';
+    const opts = SERVICE_OPTIONS[subKey] || ['Traditional Photo','Traditional video','Candid Photography','Candid video','Authentic Photo','Authentic video','Drone',];
+    opts.forEach(opt=>{
+      const unit = PRICING[opt] || 0;
+      const existing = STATE.items.find(i=>i.meta && i.meta.sub===subKey && i.meta.opt===opt);
+      const qty = existing ? existing.qty : 1;
+      const row = document.createElement('div'); row.className = 'option-row';
+      row.innerHTML = `<div class="option-left"><input type="checkbox" data-opt="${opt}" ${existing ? 'checked' : ''} aria-label="${opt}">
+        <div><div style="font-weight:700">${opt}</div><div style="font-size:12px;color:var(--muted)">${formatCurrency(unit)}</div></div></div>
+        <div class="option-right"><input type="number" min="1" value="${qty}" data-qty="${opt}" class="qty" aria-label="Quantity"><div class="price-badge">${formatCurrency(unit)}</div></div>`;
+      modalBody.appendChild(row);
+
+      const cb = row.querySelector('input[type=checkbox]');
+      const qtyInp = row.querySelector('input[type=number]');
+
+      cb.addEventListener('change', ()=>{
+        const q = Math.max(1, parseInt(qtyInp.value)||1);
+        if(cb.checked){
+          const id = uid();
+          STATE.items.push({id,label:`${subLabel} — ${opt}`,unitPrice:unit,qty:q,meta:{sub:subKey,opt}});
+        } else {
+          STATE.items = STATE.items.filter(it => !(it.meta && it.meta.sub===subKey && it.meta.opt===opt));
+        }
+        save(); renderDesktopCart(); renderFloatingCart();
+      });
+
+      qtyInp.addEventListener('input', ()=>{
+        const v = Math.max(1, parseInt(qtyInp.value)||1); qtyInp.value = v;
+        if(cb.checked){
+          const it = STATE.items.find(it=>it.meta && it.meta.sub===subKey && it.meta.opt===opt);
+          if(it){ it.qty = v; save(); renderDesktopCart(); renderFloatingCart(); }
+        }
+      });
+    });
+
+    optionsModal.style.display = 'block';
+    optionsModal.setAttribute('aria-hidden','false');
+  }
+  $('#modalClose').addEventListener('click', ()=>{ optionsModal.style.display='none'; optionsModal.setAttribute('aria-hidden','true'); currentModalSub=null; });
+  $('#modalClear').addEventListener('click', ()=>{
+    STATE.items = STATE.items.filter(it=> !(it.meta && it.meta.sub === currentModalSub));
+    save(); renderDesktopCart(); renderFloatingCart();
+    modalBody.querySelectorAll('input[type=checkbox]').forEach(cb=>cb.checked=false);
+    modalBody.querySelectorAll('input[type=number]').forEach(n=>n.value=1);
+    showToast('Cleared');
+  });
+  $('#modalDone').addEventListener('click', ()=>{
+    const anySelected = STATE.items.some(it=>it.meta && it.meta.sub === currentModalSub);
+    if(anySelected){ if(!STATE.subservices.includes(currentModalSub)) STATE.subservices.push(currentModalSub); }
+    else STATE.subservices = STATE.subservices.filter(s=>s!==currentModalSub);
+    save(); renderSubservices(); renderDesktopCart(); renderFloatingCart();
+    optionsModal.style.display='none'; optionsModal.setAttribute('aria-hidden','true'); currentModalSub=null;
+    showToast('Saved');
+  });
+
+  /* ---------- Album ---------- */
+ addAlbumBtn.addEventListener('click', () => {
+  const typeKey = document.getElementById('albumType').value;
+  const sheets = Math.max(1, parseInt(document.getElementById('albumSheets').value) || 1);
+
+  const albumType = ALBUM_TYPES[typeKey];
+  const price = sheets * albumType.rate;
+
+  STATE.album = {
+    type: typeKey,
+    label: albumType.label,
+    sheets,
+    rate: albumType.rate,
+    price
+  };
+
+  save();                     // 🔒 persist album
+  renderDesktopCart();        // 🛒 cart
+  renderFloatingCart();       // 📱 mobile
+  setStep(4);                 // ➡️ go review
+  renderReviewTable();        // 📄 final summary
+});
+
+
+
+  /* ---------- Cart rendering (desktop + mobile) ---------- */
+  function renderDesktopCart(){
+    desktopCartList.innerHTML = '';
+    let subtotal = 0;
+    STATE.items.forEach((it, idx)=>{
+      const div = document.createElement('div'); div.className = 'cart-item';
+      div.innerHTML = `<div class="meta"><div style="font-weight:800">${it.label}</div><div style="color:var(--muted);font-size:12px">${formatCurrency(it.unitPrice)}</div></div>
+        <div class="cart-controls"><input type="number" min="1" value="${it.qty}" data-idx="${idx}" class="qty" style="width:64px"><div style="min-width:80px;text-align:right;font-weight:800">${formatCurrency(it.unitPrice*it.qty)}</div><button class="btn small ghost" data-remove="${idx}">Remove</button></div>`;
+      desktopCartList.appendChild(div);
+      subtotal += it.unitPrice * it.qty;
+    });
+    if (STATE.album) {
+  const a = STATE.album;
+
+  const div = document.createElement('div');
+  div.className = 'cart-item';
+
+  div.innerHTML = `
+    <div class="meta">
+      <div style="font-weight:800">
+        ${a.label} — ${a.sheets} sheets
+      </div>
+      <div style="color:var(--muted);font-size:12px">
+        ₹${a.rate} per sheet
+      </div>
+    </div>
+    <div class="cart-controls">
+      <div style="min-width:80px;text-align:right;font-weight:800">
+        ${formatCurrency(a.price)}
+      </div>
+      <button class="btn small ghost" data-remove-album>Remove</button>
+    </div>
+  `;
+
+  desktopCartList.appendChild(div);
+  subtotal += a.price;   // ✅ IMPORTANT
+}
+
+    desktopSubtotal.textContent = formatCurrency(subtotal);
+desktopTotal.textContent = formatCurrency(subtotal);
+desktopCartCount.textContent =
+  `${STATE.items.length + (STATE.album ? 1 : 0)} items`;
+
+
+    // attach events
+    desktopCartList.querySelectorAll('[data-remove]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{ const i = Number(btn.dataset.remove); STATE.items.splice(i,1); save(); renderDesktopCart(); renderFloatingCart(); });
+    });
+    desktopCartList.querySelectorAll('input[type=number]').forEach(inp=>{
+      inp.addEventListener('input', ()=>{ const v = Math.max(1, parseInt(inp.value)||1); inp.value=v; const i = Number(inp.dataset.idx); STATE.items[i].qty=v; save(); renderDesktopCart(); renderFloatingCart(); });
+    });
+    const remAlb = desktopCartList.querySelector('[data-remove-album]');
+    if (remAlb) {
+  remAlb.addEventListener('click', () => {
+    STATE.album = null;
+    save();
+    renderDesktopCart();
+    renderFloatingCart();
+    renderReviewTable();
+  });
+}
+  }
+
+  function renderFloatingCart(){
+    mobileCartList.innerHTML = '';
+    let total = 0;
+    STATE.items.forEach((it, idx)=>{
+      const div = document.createElement('div'); div.className='cart-item';
+      div.innerHTML = `<div class="meta"><div style="font-weight:800">${it.label}</div><div style="color:var(--muted);font-size:12px">${formatCurrency(it.unitPrice)}</div></div>
+        <div class="cart-controls"><input type="number" min="1" value="${it.qty}" data-idx="${idx}" class="qty" style="width:64px"><div style="min-width:80px;text-align:right;font-weight:800">${formatCurrency(it.unitPrice*it.qty)}</div><button class="btn small ghost" data-remove="${idx}">Remove</button></div>`;
+      mobileCartList.appendChild(div);
+      total += it.unitPrice * it.qty;
+    });
+    if(STATE.album){
+      const a = STATE.album;
+      const div = document.createElement('div'); div.className='cart-item';
+      div.innerHTML = `<div class="meta"><div style="font-weight:800">Album — ${a.sheets} sheets</div><div style="color:var(--muted);font-size:12px">Delivery ${a.months} month(s)</div></div>
+        <div class="cart-controls"><div style="min-width:80px;text-align:right;font-weight:800">${formatCurrency(a.price)}</div><button class="btn small ghost" data-remove-album>Remove</button></div>`;
+      mobileCartList.appendChild(div);
+      total += a.price;
+    }
+
+    // events
+    mobileCartList.querySelectorAll('[data-remove]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{ const i = Number(btn.dataset.remove); STATE.items.splice(i,1); save(); renderFloatingCart(); renderDesktopCart(); });
+    });
+    mobileCartList.querySelectorAll('input[type=number]').forEach(inp=>{
+      inp.addEventListener('input', ()=>{ const v = Math.max(1, parseInt(inp.value)||1); inp.value=v; const i = Number(inp.dataset.idx); STATE.items[i].qty=v; save(); renderFloatingCart(); renderDesktopCart(); });
+    });
+    const remAlb = mobileCartList.querySelector('[data-remove-album]');
+    if(remAlb) remAlb.addEventListener('click', ()=>{ STATE.album=null; save(); renderFloatingCart(); renderDesktopCart(); });
+
+    drawerCount.textContent = `${STATE.items.length + (STATE.album?1:0)}`;
+    mobileTotal.textContent = formatCurrency(total);
+    // toggle visibility of drawer toggle on mobile
+    if(window.innerWidth < 1000){
+      drawerToggle.style.display = (STATE.items.length || STATE.album) ? 'flex' : 'none';
+    }
+    return total;
+  }
+
+  /* ---------- Review Table ---------- */
+ function renderReviewTable(){
+  reviewBody.innerHTML = '';
+  let grand = 0;
+
+  STATE.items.forEach(it => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${it.label}</td>
+      <td style="text-align:right">${it.qty}</td>
+      <td style="text-align:right">${formatCurrency(it.unitPrice)}</td>
+      <td style="text-align:right">${formatCurrency(it.unitPrice * it.qty)}</td>
+    `;
+    reviewBody.appendChild(row);
+    grand += it.unitPrice * it.qty;
+  });
+
+  // ✅ ALBUM RENDER (THIS WAS MISSING / NOT EXECUTING)
+  if (STATE.album) {
+    const a = STATE.album;
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${a.label} — ${a.sheets} sheets</td>
+      <td style="text-align:right">1</td>
+      <td style="text-align:right">₹${a.rate} × ${a.sheets}</td>
+      <td style="text-align:right">${formatCurrency(a.price)}</td>
+    `;
+    reviewBody.appendChild(row);
+    grand += a.price;
+  }
+
+  grandTotalEl.textContent = formatCurrency(grand);
+}
+
+// ================= PDF DOWNLOAD (FIXED + LOGO WATERMARK) =================
+// ================= PDF DOWNLOAD (FIXED – NO ROW BREAKS) =================
+
+async function generatePDF() {
+  if (STATE.items.length === 0 && !STATE.album) {
+    alert('No items selected.');
+    return;
+  }
+
+  /* ---------- Wrapper ---------- */
+ const wrapper = document.createElement('div');
+wrapper.style.position = 'fixed';
+wrapper.style.left = '-9999px';
+wrapper.style.top = '0';
+
+wrapper.style.width = '900px';
+wrapper.style.minHeight = '1200px';      // 🔥 CRITICAL
+wrapper.style.padding = '24px';
+wrapper.style.paddingBottom = '80px';
+
+wrapper.style.background = '#ffffff';
+wrapper.style.color = '#111';
+wrapper.style.fontFamily = 'Inter, Arial, sans-serif';
+wrapper.style.overflow = 'visible';      // 🔥 IMPORTANT
+
+document.body.appendChild(wrapper);
+
+
+  /* ---------- SAFE LOGO LOAD ---------- */
+  let logoReady = false;
+  const logo = new Image();
+logo.crossOrigin = 'anonymous';
+logo.src = 'gallery/sweetmemorieslogo.jpeg';
+
+
+  await new Promise(resolve => {
+    logo.onload = () => { logoReady = true; resolve(); };
+    logo.onerror = () => resolve();
+    setTimeout(resolve, 1000);
+  });
+
+const watermarkLayer = document.createElement('div');
+watermarkLayer.style.position = 'absolute';
+watermarkLayer.style.top = '0';
+watermarkLayer.style.left = '0';
+watermarkLayer.style.width = '100%';
+watermarkLayer.style.height = '100%';
+watermarkLayer.style.zIndex = '1';
+watermarkLayer.style.pointerEvents = 'none';
+
+wrapper.appendChild(watermarkLayer); // 🔥 IMPORTANT
+
+
+
+
+
+  /* ---------- WATERMARK GRID ---------- */
+ if (logoReady) {
+  for (let y = 150; y < 2200; y += 320) {
+    for (let x = -200; x < 900; x += 420) {
+
+      const wm = document.createElement('img');
+      wm.src = logo.src;
+      wm.crossOrigin = 'anonymous';
+      wm.style.position = 'absolute';
+      wm.style.left = `${x}px`;
+      wm.style.top = `${y}px`;
+      wm.style.width = '220px';
+      wm.style.opacity = '0.08';
+      wm.style.transform = 'rotate(-25deg)';
+      wm.style.pointerEvents = 'none';
+
+      watermarkLayer.appendChild(wm); // ✅ FIXED
+    }
+  }
+}
+
+
+  /* ---------- CONTENT ---------- */
+  let html = `
+    <div style="position:relative;z-index:2">
+      <h2>Sweet Memories Photography</h2>
+      <p style="font-size:13px">Tentative / Negotiable Quotation</p>
+
+      <table style="width:100%;border-collapse:collapse;margin-top:12px">
+        <thead>
+          <tr style="background:#f5f5f5">
+            <th style="padding:8px;border:1px solid #ddd">Item</th>
+            <th style="padding:8px;border:1px solid #ddd">Qty</th>
+            <th style="padding:8px;border:1px solid #ddd">Unit</th>
+            <th style="padding:8px;border:1px solid #ddd">Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+  `;
+
+  let grand = 0;
+
+  STATE.items.forEach(it => {
+    const sub = it.qty * it.unitPrice;
+    grand += sub;
+    html += `
+      <tr style="page-break-inside:avoid;break-inside:avoid;">
+        <td style="padding:8px;border:1px solid #ddd">${it.label}</td>
+        <td style="padding:8px;border:1px solid #ddd;text-align:right">${it.qty}</td>
+        <td style="padding:8px;border:1px solid #ddd;text-align:right">${formatCurrency(it.unitPrice)}</td>
+        <td style="padding:8px;border:1px solid #ddd;text-align:right">${formatCurrency(sub)}</td>
+      </tr>
+    `;
+  });
+
+  if (STATE.album) {
+    const a = STATE.album;
+    grand += a.price;
+
+    html += `
+      <tr style="page-break-inside:avoid;break-inside:avoid;">
+        <td style="padding:8px;border:1px solid #ddd">
+          ${a.label} — ${a.sheets} sheets
+        </td>
+        <td style="padding:8px;border:1px solid #ddd;text-align:right">1</td>
+        <td style="padding:8px;border:1px solid #ddd;text-align:right">
+          ₹${a.rate} × ${a.sheets}
+        </td>
+        <td style="padding:8px;border:1px solid #ddd;text-align:right">
+          ${formatCurrency(a.price)}
+        </td>
+      </tr>
+    `;
+  }
+
+  html += `
+        </tbody>
+      </table>
+
+      <div style="page-break-inside:avoid;break-inside:avoid;">
+        <h3 style="text-align:right;margin-top:14px">
+          Grand Total: ${formatCurrency(grand)}
+        </h3>
+      </div>
+
+      <!-- TERMS & CONDITIONS -->
+      <div style="
+        margin-top:30px;
+        font-size:12px;
+        line-height:1.6;
+        page-break-inside:avoid;
+        break-inside:avoid;
+      ">
+        <h4 style="margin-bottom:8px;">Terms & Conditions</h4>
+        <ul style="padding-left:16px;">
+          <li>For a brief and clear explanation of all details, please contact the SMP team & Please review the samples and outputs included in your quoted price.</li>
+          <li>This is only an estimated amount and not the final price & Negotiations are welcome.</li>
+          <li>Prices may vary depending on the specific requirements & The final price will be disclosed after discussion with the SMP team.</li>
+          <li>Travel, accommodation, will be charged additionally(Only for Pre Wedding).</li>
+          <li>We are excited about the opportunity to speak with you and showcase our work.</li>
+        </ul>
+
+        <p style="margin-top:10px;">
+          <b>Note:</b> This quotation is for discussion purposes only and not a final invoice.
+        </p>
+      </div>
+    </div>
+  `;
+
+
+  wrapper.innerHTML += html;
+
+  /* ---------- PREVENT ROW SPLITTING ---------- */
+  wrapper.querySelectorAll('tr').forEach(tr => {
+    tr.style.pageBreakInside = 'avoid';
+    tr.style.breakInside = 'avoid';
+  });
+
+  /* ---------- CANVAS ---------- */
+  await new Promise(r => setTimeout(r, 800));
+
+
+  const canvas = await html2canvas(wrapper, {
+  scale: 2,
+  useCORS: true,
+  allowTaint: true,
+  backgroundColor: '#ffffff'
+});
+const imgData = canvas.toDataURL('image/png');
+
+  /* ---------- PDF ---------- */
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF('p', 'mm', 'a4');
+
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const pageHeight = pdf.internal.pageSize.getHeight();
+
+  const imgHeight = (canvas.height * pageWidth) / canvas.width;
+  let heightLeft = imgHeight;
+  let position = 0;
+
+  pdf.addImage(imgData, 'PNG', 0, position, pageWidth, imgHeight, undefined, 'FAST');
+  heightLeft -= pageHeight;
+
+  while (heightLeft > 0) {
+    position -= pageHeight;
+    pdf.addPage();
+    pdf.addImage(imgData, 'PNG', 0, position, pageWidth, imgHeight, undefined, 'FAST');
+    heightLeft -= pageHeight;
+  }
+
+  pdf.save('Sweet-Memories-Quotation.pdf');
+  document.body.removeChild(wrapper);
+}
+
+
+/* ---------- Reset ---------- */
+  function resetAll(){
+    if(!confirm('Clear all selections and reset?')) return;
+    STATE = {occasion:null, subservices:[], items:[], album:null, step:1};
+    save(); renderAll();
+    showToast('Reset complete');
+  }
+
+  /* ---------- Events & init ---------- */
+  // Navigation
+  $('#toStep2').addEventListener('click', ()=> {
+    if(!STATE.occasion){ alert('Please select an occasion first.'); return; }
+    renderSubservices(); setStep(2);
+  });
+  $('#backTo1').addEventListener('click', ()=> setStep(1));
+  $('#toStep3').addEventListener('click', ()=> setStep(3));
+  $('#backTo2').addEventListener('click', ()=> setStep(2));
+  $('#backTo3').addEventListener('click', ()=> setStep(3));
+  $('#skipToSubs').addEventListener('click', ()=> { renderSubservices(); setStep(2); });
+  $('#skipAlbum').addEventListener('click', () => {
+  setStep(4);
+  renderReviewTable();
+});
+
+  $('#addAlbumBtn').addEventListener('click', ()=> { /* handled above */ });
+
+  btnStart.addEventListener('click', ()=> setStep(1));
+  btnResetTop.addEventListener('click', resetAll);
+  $('#clearOccasions').addEventListener('click', ()=> { STATE.occasion=null; STATE.subservices=[]; STATE.items=[]; STATE.album=null; save(); renderAll(); });
+  $('#toStep3').addEventListener('click', ()=> setStep(3));
+
+  // PDF & reset buttons
+  downloadBtn.addEventListener('click', generatePDF);
+  desktopPdf.addEventListener('click', generatePDF);
+  mobilePdf.addEventListener('click', generatePDF);
+
+  resetBtn.addEventListener('click', resetAll);
+  desktopReset.addEventListener('click', resetAll);
+  mobileReset.addEventListener('click', resetAll);
+
+  // Drawer toggle mobile
+  drawerToggle.addEventListener('click', ()=>{
+    const open = mobileDrawer.classList.toggle('open');
+    mobileDrawer.style.display = 'block';
+    mobileDrawer.setAttribute('aria-hidden', !open);
+    drawerToggle.setAttribute('aria-expanded', open);
+  });
+  $('#closeDrawer').addEventListener('click', ()=> { mobileDrawer.classList.remove('open'); mobileDrawer.setAttribute('aria-hidden','true'); });
+
+  // Desktop and mobile cart interactions delegated during render
+
+  // modal is wired above
+
+  // initial render + persistence
+  function renderAll(){
+    renderOccasions();
+    renderSubservices();
+    renderDesktopCart();
+    renderFloatingCart();
+    renderReviewTable();
+    setStep(STATE.step || 1);
+    // show / hide drawer toggle based on screen and items
+    if(window.innerWidth < 1000){
+      drawerToggle.style.display = (STATE.items.length || STATE.album) ? 'flex' : 'none';
+      mobileDrawer.style.display = (STATE.items.length || STATE.album) ? 'block' : 'none';
+    } else {
+      drawerToggle.style.display = 'none';
+      mobileDrawer.classList.remove('open');
+      mobileDrawer.style.display = 'none';
+    }
+  }
+
+  // wire initial listeners for desktop/mobile cart interactions after render
+  window.addEventListener('resize', ()=> { if(window.innerWidth < 1000){ drawerToggle.style.display = (STATE.items.length || STATE.album) ? 'flex' : 'none'; } else { drawerToggle.style.display = 'none'; mobileDrawer.classList.remove('open'); } });
+
+  // load saved state and init
+  load();
+  renderAll();
+
+  // attach some quick UI actions (for convenience)
+  // clicking desktopDownload, mobileDownload handled above
+  // clicking desktopReset handled above
+
+  </script>
+</body>
+</html>

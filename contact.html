@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us | Sweet Memories Photography</title>
+
+<style>
+/* ================= RESET ================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #ffffff;
+  color: #000;
+}
+
+/* ================= PAGE ================= */
+.contact-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+}
+
+/* CARD */
+.contact-card {
+  width: 100%;
+  max-width: 520px;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 40px 30px;
+  box-shadow: 0 20px 45px rgba(0,0,0,0.12);
+  text-align: center;
+}
+
+/* TITLE */
+.contact-card h1 {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.contact-card p {
+  font-size: 15px;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+/* BUTTONS */
+.contact-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.contact-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+
+  border: 1px solid #000;
+  color: #000;
+  background: #fff;
+
+  transition: all 0.3s ease;
+}
+
+.contact-btn:hover {
+  background: #000;
+  color: #fff;
+}
+
+/* WhatsApp special */
+.whatsapp {
+  border-color: #25D366;
+  color: #25D366;
+}
+
+.whatsapp:hover {
+  background: #25D366;
+  color: #fff;
+}
+
+/* Quotation */
+.quotation {
+  background: #000;
+  color: #fff;
+}
+
+.quotation:hover {
+  background: #222;
+}
+
+/* ================= DESKTOP ================= */
+@media (min-width: 900px) {
+  .contact-card {
+    padding: 50px 40px;
+  }
+
+  .contact-card h1 {
+    font-size: 36px;
+  }
+
+  .contact-actions {
+    flex-direction: row;
+  }
+
+  .contact-btn {
+    flex: 1;
+  }
+}
+
+/* ================= MOBILE SMALL ================= */
+@media (max-width: 480px) {
+  .contact-card {
+    padding: 30px 20px;
+  }
+
+  .contact-card h1 {
+    font-size: 26px;
+  }
+
+  .contact-card p {
+    font-size: 14px;
+  }
+
+  .contact-btn {
+    font-size: 14px;
+    padding: 12px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<section class="contact-page">
+  <div class="contact-card">
+    <h1>Get in Touch</h1>
+    <p>We’d love to capture your beautiful moments. Let’s connect.</p>
+
+    <div class="contact-actions">
+      <!-- Call -->
+      <a href="tel:+917097587875" class="contact-btn">
+        📞 Call Us
+      </a>
+
+      <!-- WhatsApp -->
+      <a href="https://wa.me/917097587875" target="_blank" class="contact-btn whatsapp">
+        💬 WhatsApp
+      </a>
+
+      <!-- Quotation -->
+      <a href="quotation2.html" class="contact-btn quotation">
+        🧾 Build Your Quotation
+      </a>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

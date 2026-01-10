@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Enquiry | Sweet Memories Photography</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Poppins',sans-serif;
+}
+
+body{
+  min-height:100vh;
+  background:url("images/bg.jpg") center/cover no-repeat;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+/* ================= GLASS FORM ================= */
+.form-wrapper{
+  position:relative;
+  width:100%;
+  max-width:420px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  background: rgba(255,255,255,0.18);
+  border-radius:20px;
+  padding:36px 28px;
+  box-shadow:0 30px 60px rgba(0,0,0,.25);
+  text-align:center;
+  border:1px solid rgba(255,255,255,.3);
+}
+
+/* ================= CLOSE ICON ================= */
+.form-close{
+  position:absolute;
+  top:14px;
+  right:16px;
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.85);
+  color:#333;
+  font-size:22px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition:.25s ease;
+}
+
+.form-close:hover{
+  transform:scale(1.1);
+}
+
+/* LOGO */
+.logo{
+  width:120px;
+  margin-bottom:18px;
+}
+
+h1{
+  font-size:24px;
+  margin-bottom:6px;
+}
+
+p{
+  font-size:14px;
+  color:#333;
+  margin-bottom:26px;
+}
+
+/* INPUTS */
+form{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+input, select{
+  padding:14px;
+  border-radius:12px;
+  border:none;
+  outline:none;
+  font-size:14px;
+  background:rgba(255,255,255,.9);
+}
+
+button{
+  margin-top:10px;
+  padding:14px;
+  border:none;
+  border-radius:30px;
+  background:#c89b3c;
+  color:#fff;
+  font-size:15px;
+  cursor:pointer;
+}
+
+/* POPUP */
+.popup{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+}
+
+.popup-box{
+  background:#fff;
+  padding:28px;
+  border-radius:18px;
+  text-align:center;
+}
+</style>
+</head>
+
+<body>
+
+<div class="form-wrapper" id="enquiryFormBox">
+  <span class="form-close" onclick="closeForm()">×</span>
+
+  <img src="gallery/sweetmemoriesphotographylog.jpeg" class="logo" alt="Logo">
+
+  <h1>Enquire Now</h1>
+  <p>Our team will respond within 24 hours</p>
+
+  <form id="enquiryForm">
+   <input type="text" id="fullName" placeholder="Your Name" required>
+
+    <input type="tel" id="phone" placeholder="Phone Number" pattern="[0-9]{10}" required>
+
+    <select id="service" required>
+      <option value="">Select Photography Service</option>
+      <option>Wedding Photography</option>
+      <option>Baby Photography</option>
+      <option>Maternity Photography</option>
+      <option>Model Shoot</option>
+      <option>Pre-Wedding Shoot</option>
+    </select>
+
+    <input type="text" id="location" placeholder="Location" required>
+
+    <button type="submit">Submit Enquiry</button>
+  </form>
+</div>
+
+<!-- POPUP -->
+<div class="popup" id="popup">
+  <div class="popup-box">
+    <h2>Thank You!</h2>
+    <p>Our team will respond within <b>24 hours</b>.</p>
+    <button onclick="closePopup()">OK</button>
+  </div>
+</div>
+
+<script>
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwWvUnFh6-8BAyCah65hewMXG26p0biIvN93FmXmD9AeaNfQp_aN9RNffv8j38XHRDY/exec";
+
+const form = document.getElementById("enquiryForm");
+const popup = document.getElementById("popup");
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const data = {
+    fullName: document.getElementById("fullName").value,
+    phone: document.getElementById("phone").value,
+    service: document.getElementById("service").value,
+    location: document.getElementById("location").value
+  };
+
+  fetch(WEB_APP_URL, {
+    method: "POST",
+    mode: "no-cors",   // 🔥 THIS FIXES NETLIFY ISSUE
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  });
+
+  // ✅ DO NOT WAIT FOR RESPONSE
+  popup.style.display = "flex";
+  form.reset();
+});
+
+function closePopup() {
+  popup.style.display = "none";
+}
+
+function closeForm() {
+  window.history.back();
+}
+</script>
+
+
+</body>
+</html>

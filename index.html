@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!-- Font Awesome 6 CDN – place inside <head> -->
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      integrity="sha512-NM+KjRPs0yJr3aCg8oI5K4Iz6Kv1QZCeiGQ9pJhC2sdrOXsxXf6UXhD55q7xa0nm1E6AlIYvuepTq0DthRWFAA=="
+      crossorigin="anonymous" referrerpolicy="no-referrer">
+    <title>Sweet Memories Photography</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+</head> 
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+<header class="site-header">
+  <nav class="navbar">
+    <!-- Logo -->
+    <div class="nav-logo">
+      <img src="gallery/sweetmemoriesphotographylog.jpeg" alt="Sweet Memories Photography Logo">
+    </div>
+
+    <!-- Desktop Navigation -->
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="#reels">Instagram Reels</a></li>
+      <li><a href="#testimonials">Feedback</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+
+    <!-- CTA Button -->
+    <!-- <a href="quotation2.html" class="nav-cta">Build Your Quotation</a> -->
+
+    <!-- Hamburger -->
+    <button class="hamburger" aria-label="Open Menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu">
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="#reels">Instagram Reels</a>
+    <a href="#testimonials">Feedback</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</header>
+
+<!-- hero section -->
+ <!-- ================= 3D SLIDER ================= -->
+  <section class="slider3d-section">
+    <div class="carousel" id="carousel">
+      <img src="gallery/herogallery/heroimage4.jpeg" alt="" class="item">
+      <img src="gallery/herogallery/heroimage1.jpeg" alt="" class="item">
+      <img src="gallery/herogallery/heroimage3.jpeg" alt="" class="item">
+      <img src="gallery/herogallery/heroimage2.jpeg" alt="" class="item">
+      <img src="gallery/herogallery/heroimage5.jpeg" alt="" class="item">
+    </div>
+  </section>
+
+  <!-- IMAGE LIGHTBOX -->
+  <div id="imageModal" class="modal" aria-hidden="true">
+    <span class="closeBtn" role="button" aria-label="Close">&times;</span>
+    <img class="modal-content" id="modalImg" alt="expanded image">
+  </div>
+
+  <!-- ================= ABOUT US ================= -->
+<section id="about" class="about-section">
+  <div class="about-container">
+    
+    <div class="about-text">
+      <h2>About <span>Sweet Memories Photography</span></h2>
+
+      <p class="about-intro">
+        With over <strong>7+ years of experience</strong>, Sweet Memories Photography has proudly captured 
+        <strong>650+ wedding celebrations</strong>, turning real moments into timeless memories.
+      </p>
+
+      <p>
+        We are recognized as one of the 
+        best wedding photographers in Tirupati, known for our storytelling approach,
+        emotional frames, and attention to detail. Our team specializes in 
+        wedding photography in Tirupati, blending creativity with professionalism.
+      </p>
+
+      <!-- <p>
+        From elegant weddings to joyful events, we offer 
+        <mark>professional photography services</mark> including 
+        <strong>candid photography</strong>, 
+        <strong>pre wedding photography</strong>, and complete 
+        <mark>event photography services</mark> — all crafted to reflect your unique story.
+      </p> -->
+
+      <p class="about-highlight">
+        We don’t just take photos — we preserve emotions, laughter, and love for generations to come.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= SERVICES SECTION ================= -->
+<section id="services" class="services-section">
+  <div class="services-container">
+
+    <!-- LEFT: VIDEO -->
+    <div class="services-media">
+      <video
+        class="services-video"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        poster="images/services-poster.jpg"
+      >
+        <source src="videos/Cover Reel 04x03.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+
+    <!-- RIGHT: CONTENT -->
+    <div class="services-content">
+      <h2>Our Services</h2>
+
+      <p>
+        At <strong>Sweet Memories Photography Tirupati</strong>, we provide all types of
+        professional photography services to capture your special moments.
+      </p>
+
+      <p>
+        Our offerings include wedding photography, candid shots, pre-wedding shoots,
+        maternity sessions, birthday events, and corporate photography.
+        With over <strong>7+ years of experience</strong>, our skilled Tirupati photographers
+        blend creativity and expertise to deliver stunning images and cinematic videos.
+      </p>
+
+      <div class="services-buttons">
+        <a href="tel:+917097587875" class="btn primary">Call Now</a>
+        <a href="gallery.html" class="btn secondary">Our Gallery</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SERVICES ICON SECTION ================= -->
+<section id="services-icons" class="services-icons-section">
+  <div class="services-icons-container">
+
+    <div class="service-item">
+      <div class="service-icon">📷</div>
+      <h3>Candid / Artistic Photography</h3>
+      <p>
+        Candid photography goes beyond simply taking pictures — it is about
+        celebrating real emotions and genuine moments. At Sweet Memories
+        Photography, we focus on natural smiles, unposed reactions, and authentic
+        interactions. Our team blends seamlessly into your celebrations to
+        capture memories that feel real and timeless.
+      </p>
+    </div>
+
+    <div class="service-item">
+      <div class="service-icon">🖼️</div>
+      <h3>Traditional Photography</h3>
+      <p>
+        Traditional wedding photography highlights timeless portraits and formal
+        moments. We carefully capture rituals, family gatherings, and cultural
+        traditions with perfect composition and vibrant clarity — preserving
+        every meaningful detail beautifully.
+      </p>
+    </div>
+
+    <div class="service-item">
+      <div class="service-icon">🎥</div>
+      <h3>Wedding Films</h3>
+      <p>
+        A wedding is like a story unfolding on screen. Our cinematic wedding
+        films combine emotions, traditions, and celebrations into a beautifully
+        crafted visual journey — allowing you to relive your special day for
+        years to come.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= INSTAGRAM REELS ================= -->
+<section id="reels" class="reels-section">
+  <h2 class="reels-title">📸 Instagram Reels</h2>
+
+  <div class="reels-wrapper">
+    <div class="reels-track" id="reelsTrack">
+
+      <!-- Reel 1 -->
+      <a href="https://www.instagram.com/reel/DRxHR3kkjR5/?igsh=Mnl2OGJhY3VicWhu"
+         target="_blank" class="reel-item">
+        <img src="gallery/reelsgallery/thumbnail11.jpeg" alt="Instagram Reel 1" loading="lazy">
+      </a>
+
+      <!-- Reel 2 -->
+      <a href="https://www.instagram.com/reel/DRe8xaxDXz2/?igsh=eWRpczY4angyeXY2"
+         target="_blank" class="reel-item">
+        <img src="gallery/reelsgallery/thumbnail22.jpeg" alt="Instagram Reel 2" loading="lazy">
+      </a>
+
+      <!-- Reel 3 -->
+      <a href="https://www.instagram.com/reel/DLFWIUnyfr5/?igsh=MXR2cTlzMDh3M3A3bw=="
+         target="_blank" class="reel-item">
+        <img src="gallery/reelsgallery/thumbnail33.jpeg" alt="Instagram Reel 3" loading="lazy">
+      </a>
+
+      <!-- Reel 4 -->
+      <a href="https://www.instagram.com/reel/DSPnH7_kmJo/?igsh=MWE3NmtyMzdxa3Bmcw=="
+         target="_blank" class="reel-item">
+        <img src="gallery/reelsgallery/thumbnail44.jpeg" alt="Instagram Reel 4" loading="lazy">
+      </a>
+
+      <!-- Reel 5 -->
+      <a href="https://www.instagram.com/reel/DGxrRTySQFk/?igsh=cWx2NTVwb2d2Nmpt"
+         target="_blank" class="reel-item">
+        <img src="gallery/reelsgallery/thumbnail55.jpeg" alt="Instagram Reel 5"   loading="lazy">
+      </a>
+
+      <!-- Reel 6 -->
+      <a href="https://www.instagram.com/reel/C_sY0xnSAJ0/?igsh=MTFzeWUzNXYxYm80NQ=="
+         target="_blank" class="reel-item">
+        <img src="gallery/reelsgallery/thumbnail66.jpeg" alt="Instagram Reel 6" loading="lazy">
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= TESTIMONIALS ================= -->
+<section id="testimonials" class="testimonials-section">
+  <h2 class="testimonials-title">Happy Couples</h2>
+
+  <div class="testimonials-wrapper">
+    <div class="testimonials-track" id="testimonialsTrack">
+
+      <!-- Testimonial 1 -->
+      <div class="testimonial-card">
+        <img src="gallery/testimonialsgallery/couple1.jpg" alt="Wedding Couple 1">
+        <p class="testimonial-text">
+          “Sweet Memories Photography captured every emotion beautifully.
+          The photos feel so natural and timeless.”
+        </p>
+        <span class="testimonial-name">– Mohith Chand & Shreeja Manaswi</span>
+      </div>
+
+      <!-- Testimonial 2 -->
+      <div class="testimonial-card">
+        <img src="gallery/testimonialsgallery/couple2.jpg" alt="Wedding Couple 2">
+        <p class="testimonial-text">
+          “From candid moments to traditional shots, everything was perfect.
+          We couldn’t be happier with our wedding album.”
+        </p>
+        <span class="testimonial-name">– Praveen & Anusha</span>
+      </div>
+
+      <!-- Testimonial 3 -->
+      <div class="testimonial-card">
+        <img src="gallery/testimonialsgallery/couple3.jpg" alt="Wedding Couple 3">
+        <p class="testimonial-text">
+          “The team was very friendly and professional.
+          Our wedding film feels like a movie.”
+        </p>
+        <span class="testimonial-name">– Gowtham & Manoghna</span>
+      </div>
+
+      <!-- Testimonial 4 -->
+      <div class="testimonial-card">
+        <img src="gallery/testimonialsgallery/couple4.jpg" alt="Wedding Couple 4">
+        <p class="testimonial-text">
+          “Every picture tells a story. Thank you for making our memories so special.”
+        </p>
+        <span class="testimonial-name">– Sandeep & Lahari</span>
+      </div>
+
+         <!-- Testimonial 5 -->
+      <div class="testimonial-card">
+        <img src="gallery/testimonialsgallery/couple5.jpg" alt="Wedding Couple 5">
+        <p class="testimonial-text">
+          “Every picture tells a story. Thank you for making our memories so special.”
+        </p>
+        <span class="testimonial-name">– Bhargav & Chaya Priya</span>
+      </div>
+
+         <!-- Testimonial 6 -->
+      <div class="testimonial-card">
+        <img src="gallery/testimonialsgallery/couple6.jpg" alt="Wedding Couple 6">
+        <p class="testimonial-text">
+          “Every picture tells a story. Thank you for making our memories so special.”
+        </p>
+        <span class="testimonial-name">– Chaithanya & Thejaswi</span>
+      </div>
+
+         <!-- Testimonial 7 -->
+      <div class="testimonial-card">
+        <img src="gallery/testimonialsgallery/couple7.jpg" alt="Wedding Couple 7">
+        <p class="testimonial-text">
+          “Every picture tells a story. Thank you for making our memories so special.”
+        </p>
+        <span class="testimonial-name">– Ganesh & Sirisha</span>
+      </div>
+
+         <!-- Testimonial 8 -->
+      <div class="testimonial-card">
+        <img src="gallery/testimonialsgallery/couple8.jpg" alt="Wedding Couple 8">
+        <p class="testimonial-text">
+          “Every picture tells a story. Thank you for making our memories so special.”
+        </p>
+        <span class="testimonial-name">– Harsha  & Mounisha</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+<!-- ================= TESTIMONIAL POPUP ================= -->
+<div id="testimonialPopup" style="display:none;">
+  <div class="testimonial-popup-backdrop"></div>
+
+  <div class="testimonial-popup-content">
+    <button class="testimonial-popup-close">×</button>
+    <img id="popupImg" src="" alt="">
+    <p id="popupText"></p>
+    <span id="popupName"></span>
+  </div>
+</div>
+
+<!-- ================= MORE SERVICES (CARD STYLE) ================= -->
+<section id="more-services" class="styled-services-section">
+  <div class="styled-services-container">
+
+   <!-- Baby Photography -->
+<div class="styled-service-card">
+  <div class="service-image">
+    <img src="gallery/moreservicesimages/babyphotography.jpg" alt="Baby Photography">
+  </div>
+
+  <button class="service-btn">
+    <a href="babyphotography.html"><span>Baby Photoshoot</span></a>
+    <span class="arrow">›</span>
+  </button>
+</div>
+
+    <!-- Model Photography -->
+
+<div class="styled-service-card">
+  <div class="service-image">
+    <img src="gallery/moreservicesimages/modelphotography.jpg" alt="Model Photography">
+  </div>
+
+  <button class="service-btn">
+    <a href="modelphotography.html"><span>Model Photoshoot</span></a>
+    <span class="arrow">›</span>
+  </button>
+</div>
+
+
+    <!-- Maternity Photography -->
+<div class="styled-service-card">
+  <div class="service-image">
+    <img src="gallery/moreservicesimages/maternityphotography.jpg" alt="Maternity Photography">
+  </div>
+
+  <button class="service-btn">
+    <a href="maternityphotography.html"><span>Maternity Photoshoot</span></a>
+    <span class="arrow">›</span>
+  </button>
+</div>
+
+  </div>
+</section>
+
+<!-- ================= WORKFLOW SECTION ================= -->
+<section id="workflow" class="workflow-section">
+  <div class="workflow-container">
+
+    <span class="workflow-badge">Workflow Matters A Lot</span>
+    <h2 class="workflow-title">We provide high quality services since 2010</h2>
+
+    <div class="workflow-timeline">
+
+      <!-- Step 1 -->
+      <div class="workflow-step">
+        <div class="workflow-dot"></div>
+        <h4>Pre-Planning</h4>
+        <p>We plan and analyze client requirements</p>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="workflow-step">
+        <div class="workflow-dot active"></div>
+        <h4>On Shoot</h4>
+        <p>We capture the precise moments</p>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="workflow-step">
+        <div class="workflow-dot active"></div>
+        <h4>Post Processing</h4>
+        <p>Enhancing your moments</p>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="workflow-step">
+        <div class="workflow-dot"></div>
+        <h4>Delivered</h4>
+        <p>Get lifetime memories as deliverables</p>
+      </div>
+
+      <!-- Timeline line -->
+      <div class="workflow-line"></div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER TOP SECTION ================= -->
+<section class="footer-top">
+  <div class="footer-top-container">
+
+    <!-- LEFT : BRAND + TEXT -->
+    <div class="footer-col brand-col">
+      <img src="gallery/sweetmemoriesphotographylog.jpeg" alt="Sweet Memories Photography" class="footer-logo">
+
+      <p class="brand-text">
+        Timeless. Honest. Unscripted. We believe the best moments happen
+        naturally — and we’re there to capture them beautifully.
+      </p>
+
+      <a href="contact.html" class="footer-contact-btn">Contact</a>
+    </div>
+
+    <!-- CENTER : QUICK LINKS -->
+    <div class="footer-col links-col">
+      <h4>Quick Links</h4>
+
+      <div class="links-grid">
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+        </ul>
+
+        <ul>
+          <li><a href="#reels">Instagram Reels</a></li>
+          <li><a href="#privacy">Privacy Policy</a></li>
+          <li><a href="#terms">Terms & Conditions</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+
+
+    <!-- RIGHT : MAP -->
+    <div class="footer-col map-col">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3877.2765757368747!2d79.43264797360204!3d13.640932699853693!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa1cfdc8b6df2e077%3A0xaa88570bf5832578!2sSweet%20Memories%20Photography%20%7C%20Best%20Wedding%20Photography%20in%20Tirupati!5e0!3m2!1sen!2sin!4v1767472914576!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+
+  </div>
+</section>
+
+<!-- Floating Social Buttons -->
+<div class="social-float">
+  
+  <!-- WhatsApp -->
+  <a href="https://wa.me/917097587875?text=Hello%20I%20want%20to%20enquire%20about%20a%20photoshoot"
+     class="social-btn whatsapp"
+     target="_blank"
+     aria-label="Chat on WhatsApp">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
+         alt="WhatsApp">
+  </a>
+
+  <!-- Instagram -->
+  <a href="https://www.instagram.com/sweet_memories.photographyy?igsh=ZGs5OHB1dHFvaTdy"
+     class="social-btn instagram"
+     target="_blank"
+     aria-label="View Instagram Profile">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png"
+         alt="Instagram">
+  </a>
+
+</div>
+<!-- ================= FLOATING QUOTATION BUTTON (MOBILE) ================= -->
+<a href="quotation2.html" class="floating-quotation-btn">
+  🧾 Quote
+</a>
+
+
+
+
+<!-- ================= FINAL FOOTER ================= -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p>
+      © <span id="year"></span> Sweet Memories Photography. All Rights Reserved.
+    </p>
+  </div>
+</footer>
+
+
+    
+</body>
+</html>
