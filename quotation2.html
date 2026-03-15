@@ -511,16 +511,16 @@
 
   /* ---------- Configuration (edit here) ---------- */
   const PRICING = {
-    'Traditional Photo': 8000,
-    'Traditional video': 8000,
+    'Traditional Photography': 8000,
+    'Traditional videography': 8000,
     'Candid Photography': 10000,
-    'Candid video': 12000,
-    'Artistic Photo': 10000,
-    'Artistic video': 12000,
+    'Candid videography': 12000,
+    'Artistic Photography': 10000,
+    'Artistic videography': 12000,
     'Drone': 10000,
     'pics+ Cover Song (per day)': 30000,
     'pics+ Cover Song (two days)': 50000,
-    'Dining video': 8000,
+    'Dining videography': 8000,
     'audience' : 8000
   };
    
@@ -531,19 +531,19 @@
 };
 
   const SERVICE_OPTIONS = {
-    'haldi': ['Traditional Photo','Traditional video','Candid Photography','Candid video'],
-    'nalugu': ['Traditional Photo','Traditional video','Candid Photography','Candid video'],
-    'batchelors': ['Traditional Photo','Traditional video','Candid Photography','Candid video'],
-    'sangeeth': ['Traditional Photo','Traditional video','Candid Photography','Candid video'],
-    'mehandhi': ['Traditional Photo','Traditional video','Candid Photography','Candid video'],
-    'bride_to_be': ['Candid Photography','Candid video','Traditional Photo','Traditional video'],
-    'reception': ['Traditional Photo','Traditional video','Candid Photography','Candid video','Dining video','Artistic Photo','Artistic video','Drone'],
-    'muhurtham': ['Candid Photography','Candid video','Traditional Photo','Traditional video','Artistic Photo','Artistic video','Drone'],
-    'post_reception': ['Candid Photography','Candid video','Traditional Photo','Traditional video','Artistic Photo','Artistic video','Drone'],
-    'vratham': ['Traditional Photo','Traditional video','Candid Photography','Candid video'],
+    'haldi': ['Traditional Photography','Traditional videography','Candid Photography','Candid videography'],
+    'nalugu': ['Traditional Photography','Traditional videography','Candid Photography','Candid videography'],
+    'batchelors': ['Traditional Photography','Traditional videography','Candid Photography','Candid videography'],
+    'sangeeth': ['Traditional Photography','Traditional videography','Candid Photography','Candid videography','Dining videography'],
+    'mehandhi': ['Traditional Photography','Traditional videography','Candid Photography','Candid videography'],
+    'bride_to_be': ['Candid Photography','Candid videography','Traditional Photography','Traditional videography'],
+    'reception': ['Traditional Photography','Traditional videography','Candid Photography','Candid videography','Dining videography','Artistic Photography','Artistic videography','Drone'],
+    'muhurtham': ['Candid Photography','Candid videography','Traditional Photography','Traditional videography','Dining videography','Artistic Photography','Artistic videography','Drone'],
+    'post_reception': ['Candid Photography','Candid videography','Traditional Photography','Traditional videography','Dining videography','Artistic Photography','Artistic videography','Drone'],
+    'vratham': ['Traditional Photography','Traditional videography','Candid Photography','Candid videography'],
     'pre_post_wedding': ['pics+ Cover Song (per day)','pics+ Cover Song (two days)'],
-    'Dining': ['Candid video'],
-    'audience': ['Candid Photography','Candid video'],
+    'Dining': ['Candid videography'],
+    'audience': ['Candid Photography','Candid videography'],
     'drone_shots': ['Drone']
   };
 
@@ -722,7 +722,7 @@ const toStep3 = $('#toStep3');
     currentModalSub = subKey;
     modalTitle.textContent = subLabel;
     modalBody.innerHTML = '';
-    const opts = SERVICE_OPTIONS[subKey] || ['Traditional Photo','Traditional video','Candid Photography','Candid video','Authentic Photo','Authentic video','Drone',];
+    const opts = SERVICE_OPTIONS[subKey] || ['Traditional Photography','Traditional videography','Candid Photography','Candid videography','Dining videography','Artistic Photography','Artistic videography','Drone',];
     opts.forEach(opt=>{
       const unit = PRICING[opt] || 0;
       const existing = STATE.items.find(i=>i.meta && i.meta.sub===subKey && i.meta.opt===opt);
